@@ -1,5 +1,5 @@
 # media_player_error.py
-# Media Player Version 6
+# Media Player Version 6.5
 #
 # This file contains all custom exceptions for MediaPlayer
 
@@ -10,16 +10,20 @@ class MediaPlayerError(Exception):
     def __init__(self, *args):
         super(MediaPlayerError, self).__init__(*args)
         
-class InvalidFilepathError(MediaPlayerError):
+class ManagerError(MediaPlayerError):
+    def __init__(self, *args):
+        MediaPlayerError.__init__(self, *args)
+        
+class InvalidFilepathError(ManagerError):
     """
     Error raised when an entered filepath is invalid
     """
     def __init__(self, *args):
-        super(InvalidFilepathError, self).__init__(*args)
+        ManagerError.__init__(self, *args)
         
-class NoCurrentFileError(MediaPlayerError):
+class NoCurrentFileError(ManagerError):
     """
     Error raised when there is no cuurent file.
     """
     def __init__(self, *args):
-        super(NoCurrentFileError, self).__init__(*args)
+        ManagerError.__init__(self, *args)

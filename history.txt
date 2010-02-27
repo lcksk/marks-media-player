@@ -94,3 +94,15 @@ Version 6 - **not fully functional**
         -MediaPlayer is still hardcoded to GtkInterface
             -get_filename()
             
+Version 6.5
+    -added files from Proposed
+        -mediafilemanager.py
+        -datastructures.py
+        -linkedstructures.py
+    -modified MediaPlayer to use a MediaFileManager
+        -removed _current_file
+        -removed set_current_file(self, file)
+        -added add_file(self, file)
+            -calls _manager.add_file(self, file)
+        -get_current_file(self) calls _manager.get_current_file(self)
+            

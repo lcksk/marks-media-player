@@ -1,5 +1,5 @@
 # clinterface.py
-# Media Player Version 6
+# Media Player Version 6.5
 #
 # This file contains CLInterface
 
@@ -30,8 +30,8 @@ class CLInterface(mediaplayerinterface.MediaPlayerInterface):
     def show_message(self, message):
         print "\n", message, "\n"
         
-    def notify_playing(self):
-        self.show_message("Playing", self._parent.get_file())
+    def notify_playing(self, file):
+        self.show_message("Playing" + file)
         
     def notify_stopped(self):
         self.show_message("Stopped")

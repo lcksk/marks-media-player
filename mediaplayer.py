@@ -1,5 +1,5 @@
 # mediaplayer.py
-# Media Player Version 6
+# Media Player Version 6.5
 #
 # This file contains the MediaPlayer class.
 
@@ -17,6 +17,7 @@ except:
 import gstcore
 import gtkinterface
 import clinterface
+import mediafilemanager
 from media_player_error import *
     
 class MediaPlayer(object):
@@ -30,18 +31,21 @@ class MediaPlayer(object):
         # instance variables
         self._current_file = None
         
-        # gstreamer initialization
+        # backend initialization
         self._init_core()
         
-        # gtk initialization
+        # file management initialization
+        self._init_manager()
+        
+        # interface initialization
         self._init_interface()
         
     def _init_interface(self):
         """
         Initialize the interface of the MediaPlayer.
         """
-        self._interface = clinterface.CLInterface(self)
-        #self._interface = gtkinterface.GtkInterface(self)
+        #self._interface = clinterface.CLInterface(self)
+        self._interface = gtkinterface.GtkInterface(self)
         self._interface.begin()
         
     def _init_core(self):
@@ -50,26 +54,19 @@ class MediaPlayer(object):
         """
         self._core = gstcore.GstCore(self)
         
-    def get_filepath(self):
+    def _init_manager(self):
         """
-        Retrieve a filepath from the interface."
+        Initialize the file manager.
         """
-        # This should eventually be replaced by a call to a class that 
-        # deals specifically with managing files.
-        return self._interface._file_entry.get_text()
+        self._manager = mediafilemanager.SingleFileManager(self)
+        self.add_file("/home/mark/Music/Major_Tom.mp3")#########################################
         
     def play(self):
         """
         Tell the player to play the current file.
         """
-        try:
-            self.set_current_file(self.get_filepath())
-        except InvalidFilepathError:
-            self._interface.show_message("Please enter a valid filepath.")
-            raise
-            
         if self._core.play():
-            self._interface.notify_playing()
+            self._interface.notify_playing(self._manager.get_current_file())
         
     def stop(self):
         """
@@ -94,13 +91,11 @@ class MediaPlayer(object):
         """
         Return the current file.
         """
-        return self._current_file
+        return self._manager.get_current_file()
         
-    def set_current_file(self, file):
-        """
-        Sets the current file.
-        """
-        if os.path.isfile(file):
-            self._current_file = file
-        else:
-            raise InvalidFilepathError()
+    def add_file(self, file):
+        try:
+            self._manager.add_file(file)
+        except InvalidFilepathError:
+            self._interface.show_message("Please enter a valid filepath.")
+            raise
