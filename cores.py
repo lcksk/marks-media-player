@@ -1,3 +1,5 @@
+# Version 4.5
+
 import os
 
 import pygst
@@ -48,38 +50,30 @@ class GstCore(MediaPlayerCore):
         bus.add_signal_watch() # tell the bus that it is being watched
         bus.connect("message", self._on_message)
         
-        self._current_file = None
-        
     def play(self):
         """
         Tell the player to play the current file.
-        """
-        try:
-            self.set_current_file(self._parent.get_filepath())
-        except InvalidFilepathError:
-            self._parent.show_message("Please enter a valid filepath.")
-            raise
-            
-        self._player.set_property("uri", "file://" + self._current_file)
-        self._player.set_state(gst.STATE_PLAYING)
-        self._parent.notify_playing()
+        """            
+        self._player.set_property("uri", "file://" + 
+                self._parent.get_current_file())
+        
+        if (self._player.set_state(gst.STATE_PLAYING) == 
+                gst.STATE_CHANGE_SUCCESS):
+            return True
+        else:
+            return False
         
     def stop(self):
         """
-        Stop playing the current file.
+        Stop playing the current file. Does nothing if there isn't 
+        anything playing.
         """
-        self._player.set_state(gst.STATE_NULL)
-        self._parent.notify_stopped()
+        if self._player.get_state()[1] == gst.STATE_PLAYING:
+            if (self._player.set_state(gst.STATE_NULL) == 
+                    gst.STATE_CHANGE_SUCCESS):
+                return True
         
-        
-    def set_current_file(self, file):
-        """
-        Sets the current file.
-        """
-        if os.path.isfile(file):
-            self._current_file = file
-        else:
-            raise InvalidFilepathError()
+        return False
             
     def _on_message(self, bus, message):
         """
@@ -98,7 +92,8 @@ class GstCore(MediaPlayerCore):
         """
         Function called when the eos message is sent.
         """
-        self._player.set_state(gst.STATE_NULL)
+        if self._player.set_state(gst.STATE_NULL) == gst.STATE_CHANGE_SUCCESSFUL:
+            self._parent.notify_stopped()
         
     def _on_message_error(self, bus, message):
         """

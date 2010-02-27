@@ -1,3 +1,5 @@
+# Version 4.5
+
 class MediaPlayerError(Exception):
     """
     The super class of all MediaPlayer-specific errors.
