@@ -1,4 +1,4 @@
-# Version 4.5
+# Version 5.5
 
 class MediaPlayerError(Exception):
     """

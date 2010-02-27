@@ -1,4 +1,4 @@
-# Version 4.5
+# Version 5.5
 
 import os
 
@@ -35,7 +35,7 @@ class GstCore(MediaPlayerCore):
     
     def __init__(self, parent):
         #super(MediaPlayerCore, self).__init__(parent)
-        MediaPlayerCore.__init__(self, parent)
+        super(GstCore, self).__init__(parent)
         
         # the component that does the actual playing
         self._player = gst.element_factory_make("playbin", "player")
@@ -58,7 +58,7 @@ class GstCore(MediaPlayerCore):
                 self._parent.get_current_file())
         
         if (self._player.set_state(gst.STATE_PLAYING) == 
-                gst.STATE_CHANGE_SUCCESS):
+                gst.STATE_CHANGE_ASYNC):
             return True
         else:
             return False
@@ -93,7 +93,7 @@ class GstCore(MediaPlayerCore):
         Function called when the eos message is sent.
         """
         if self._player.set_state(gst.STATE_NULL) == gst.STATE_CHANGE_SUCCESSFUL:
-            self._parent.notify_stopped()
+            self._parent._interface.notify_stopped()
         
     def _on_message_error(self, bus, message):
         """

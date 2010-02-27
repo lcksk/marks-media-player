@@ -69,3 +69,16 @@ Version 4.5
     -GstCore._on_message_eos modified to check that state change succeeds and calls _parent.notify_stopped
     
 version 5
+    -created interfaces.py
+        -created class MediaPlayerInterface as an abstract superclass
+        -copied gtk code from mediaplayer.py to interfaces.py
+        -_init_interface calls GtkInterface
+    -added start() method to MediaPlayerInterface
+    -GstCore.{play, stop} return True or False depending on success
+        -MediaPlayer.{play, stop} modified to only notify on success
+        
+Version 5.5
+    -interface code removed from MediaPlayer
+    -changed MediaPlayerInterface.start() to begin() and added end()
+        -GtkInterface.end() calls gtk.main_quit()
+        -GtkInterface._on_main_window_destroy calls end()
