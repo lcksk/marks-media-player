@@ -1,4 +1,5 @@
-# mediaplayer.py - Version 5.5
+# mediaplayer.py
+# Media Player Version 5.7
 #
 # This file contains the MediaPlayer class.
 #
@@ -14,8 +15,8 @@ except:
     print("pyGTK 2.0 not available")
     sys.exit(1)
 
-import cores
-import interfaces
+import gstcore
+import gtkinterface
 from media_player_error import *
     
 class MediaPlayer(object):
@@ -39,14 +40,14 @@ class MediaPlayer(object):
         """
         Initialize the interface of the MediaPlayer.
         """
-        self._interface = interfaces.GtkInterface(self)
+        self._interface = gtkinterface.GtkInterface(self)
         self._interface.begin()
         
     def _init_core(self):
         """
         Initialize the backend of the MediaPlayer.
         """
-        self._core = cores.GstCore(self)
+        self._core = gstcore.GstCore(self)
         
     def get_filepath(self):
         """

@@ -74,11 +74,13 @@ version 5
         -copied gtk code from mediaplayer.py to interfaces.py
         -_init_interface calls GtkInterface
     -added start() method to MediaPlayerInterface
-    -GstCore.{play, stop} return True or False depending on success
-        -MediaPlayer.{play, stop} modified to only notify on success
         
 Version 5.5
     -interface code removed from MediaPlayer
     -changed MediaPlayerInterface.start() to begin() and added end()
         -GtkInterface.end() calls gtk.main_quit()
         -GtkInterface._on_main_window_destroy calls end()
+        
+Version 5.7
+    -moved implementations of MediaPlayerCore and MediaPlayerInterface into seperate files
+        -MediaPlayer currently directly loads gstcore.py and gtkinterface.py

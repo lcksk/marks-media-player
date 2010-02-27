@@ -1,4 +1,9 @@
-# interfaces.py - version 5.5
+# gtkinterface.py
+# Media Player Version 5.7
+#
+# This file contains a gtk implementation of MediaPlayerInterface
+#
+import mediaplayerinterface
 
 # import the Gimp Toolkit
 import gtk
@@ -9,44 +14,7 @@ except:
     print("pyGTK 2.0 not available")
     sys.exit(1)
     
-class MediaPlayerInterface(object):
-    """
-    A superclass that all MediaPlayer interfaces should inherit from.
-    It defines the standard interface for these classes.
-    """
-    def __init__(self, parent):
-        self._parent = parent
-        
-    def brgin(self):
-        """
-        Start the interface.
-        """
-        raise NotImplementedError
-        
-    def end(self):
-        """
-        Stop the interface
-        """
-        
-    def show_message(self, message):
-        """
-        Convey a message to the user.
-        """
-        raise NotImplementedError
-        
-    def notify_playing(self):
-        """
-        Notify the user that a file is being played.
-        """
-        raise NotImplementedError
-        
-    def notify_stopped():
-        """
-        Notify the user that the MediaPlayer has stopped playing.
-        """
-        raise NotImplemented
-
-class GtkInterface(MediaPlayerInterface):
+class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
     """
     A graphical implementation of MediaPlayerInterface using the Gimp 
     Toolkit.

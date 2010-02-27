@@ -1,4 +1,7 @@
-# Version 5.5
+# media_player_error.py
+# Media Player Version 5.7
+#
+# This file contains all custom exceptions for MediaPlayer
 
 class MediaPlayerError(Exception):
     """

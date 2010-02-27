@@ -1,4 +1,5 @@
-# Version 5.5
+# gstcore.py
+# Media Player Version 5.7
 
 import os
 
@@ -11,24 +12,10 @@ except:
     
 import gst
 
+import mediaplayercore
 from media_player_error import *
 
-class MediaPlayerCore(object):
-    """
-    A superclass that all MediaPlayer back ends should inherit from.
-    It defines the standard interface for these classes.
-    """
-    
-    def __init__(self, parent):
-        self._parent = parent
-        
-    def play(self):
-        raise NotImplementedError
-        
-    def stop(self):
-        raise NotImplementedError
-
-class GstCore(MediaPlayerCore):
+class GstCore(mediaplayercore.MediaPlayerCore):
     """
     An implementation of MediaPlayerCore using GStreamer.
     """
