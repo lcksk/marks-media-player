@@ -35,13 +35,7 @@ class MediaPlayer(object):
         bus.connect("message", self.on_message)
         
     def on_play_button_clicked(self, widget, data=None):
-        filepath = self.file_entry.get_text()
-        if os.path.isfile(filepath):
-            self.player.set_property("uri", "file://" + filepath)
-            self.player.set_state(gst.STATE_PLAYING)
-            self.statusbar_label.set_text("Playing " + filepath)
-        else:
-            self.statusbar_label.set_text("not a file")
+        self.play()
         
     def on_main_window_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -50,15 +44,35 @@ class MediaPlayer(object):
         t = message.type
         
         if t == gst.MESSAGE_EOS:
-            self.player.set_state(gst.STATE_NULL)
+            self.on_message_eos(bus, message)
         elif t == gst.MESSAGE_ERROR:
-            self.player.set_state(gst.STATE_NULL)
-            err, debug = message.parse_error()
-            print "Error : %s," %err, debug
+            self.on_message_error(bus, message)
+            
+    def show_message(self, message):
+        self.statusbar_label.set_text(message)
+        
+    def get_filename(self):
+        return self.file_entry.get_text()
+        
+    def on_message_eos(self, bus, message):
+        self.player.set_state(gst.STATE_NULL)
+        
+    def on_message_error(self, bus, message):
+        self.player.set_state(gst.STATE_NULL)
+        err, debug = message.parse_error()
+        print "Error : %s," %err, debug
+        
+    def play(self):
+        filepath = self.get_filename()
+        if os.path.isfile(filepath):
+            self.player.set_property("uri", "file://" + filepath)
+            self.player.set_state(gst.STATE_PLAYING)
+            self.notify_playing(filepath)
+        else:
+            self.show_message("not a file")
+            
+    def notify_playing(self, filepath):
+        self.show_message("Playing " + filepath)
 
-def main():
-    mp = MediaPlayer()
-    gtk.main()
-
-if __name__ == '__main__': 
-    main()
+mp = MediaPlayer()
+gtk.main()
