@@ -26,23 +26,26 @@ class MediaPlayer(object):
         builder.add_from_file("main_window.glade")
         
         builder.connect_signals(self)
-        self.file_entry = builder.get_object("file_entry")
-        self.statusbar_label = builder.get_object("statusbar_label")
+        self._file_entry = builder.get_object("file_entry")
+        self._statusbar_label = builder.get_object("statusbar_label")
         
         # gstreamer initialization
-        self.player = gst.element_factory_make("playbin", "player")
-        self.player.set_state(gst.STATE_NULL)
+        self._player = gst.element_factory_make("playbin", "player")
+        self._player.set_state(gst.STATE_NULL)
         fakesink = gst.element_factory_make("fakesink", "fakesink")
-        self.player.set_property("video-sink", fakesink)
-        bus = self.player.get_bus()
+        self._player.set_property("video-sink", fakesink)
+        bus = self._player.get_bus()
         bus.add_signal_watch()
         bus.connect("message", self.on_message)
         
         # other
-        self.current_file = None
+        self._current_file = None
         
     def on_play_button_clicked(self, widget, data=None):
         self.play()
+        
+    def on_stop_button_clicked(self, widget, data=None):
+        self.stop()
         
     def on_main_window_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -59,33 +62,46 @@ class MediaPlayer(object):
         self.play()
             
     def show_message(self, message):
-        self.statusbar_label.set_text(message)
+        self._statusbar_label.set_text(message)
         
     def get_filepath(self):
-        return self.file_entry.get_text()
+        return self._file_entry.get_text()
         
     def on_message_eos(self, bus, message):
-        self.player.set_state(gst.STATE_NULL)
+        self._player.set_state(gst.STATE_NULL)
         
     def on_message_error(self, bus, message):
-        self.player.set_state(gst.STATE_NULL)
+        self._player.set_state(gst.STATE_NULL)
         err, debug = message.parse_error()
         print "Error : %s," %err, debug
         
     def play(self):
-        self.set_current_file(self.get_filepath())
-        self.player.set_state(gst.STATE_PLAYING)
+        try:
+            self.set_current_file(self.get_filepath())
+        except InvalidFilepathError:
+            raise
+            return
+            
+        self._player.set_property("uri", "file://" + self._current_file)
+        self._player.set_state(gst.STATE_PLAYING)
         self.notify_playing()
+        
+    def stop(self):
+        self._player.set_state(gst.STATE_NULL)
+        self.notify_stopped()
         
     def set_current_file(self, file):
         if os.path.isfile(file):
-            self.current_file = file
+            self._current_file = file
         else:
             self.show_message("Please enter a valid filepath.")
             raise InvalidFilepathError()
     
     def notify_playing(self):
-        self.show_message("Playing " + self.current_file)
+        self.show_message("Playing " + self._current_file)
+        
+    def notify_stopped(self):
+        self.show_message("Stopped")
         
 mp = MediaPlayer()
 gtk.main()

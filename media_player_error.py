@@ -1,5 +1,7 @@
 class MediaPlayerError(Exception):
-    pass
+    def __init__(self):
+        pass
         
 class InvalidFilepathError(MediaPlayerError):
-    pass
+    def __init__(self):
+        super(InvalidFilepathError, self).__init__()
