@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+MAIN_DIR="src"
 
-geany *.py
-geany history.txt
+geany $MAIN_DIR/*.py
+geany $MAIN_DIR/history.txt

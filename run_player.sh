@@ -1,2 +1,4 @@
 #!/bin/bash
-python main.py
+MAIN_DIR="src"
+
+python $MAIN_DIR/main.py
