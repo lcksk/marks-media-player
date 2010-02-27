@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="main_window">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Media Player</property>
+    <property name="icon_name">audio-x-generic</property>
     <signal name="destroy" handler="on_main_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -18,6 +19,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x2022;</property>
+                <signal name="activate" handler="on_file_entry_activate"/>
               </object>
               <packing>
                 <property name="position">0</property>
