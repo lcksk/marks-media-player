@@ -1,3 +1,5 @@
+# Version 4
+
 import sys, os
 
 # import Gimp Toolkit
@@ -19,6 +21,7 @@ except:
 
 import gst
 
+import cores
 from media_player_error import *
     
 class MediaPlayer(object):
@@ -54,29 +57,19 @@ class MediaPlayer(object):
         """
         Initialize the backend of the MediaPlayer.
         """
-        self._player = gst.element_factory_make("playbin", "player")
-        self._player.set_state(gst.STATE_NULL)
-        
-        # send any video to a black hole
-        fakesink = gst.element_factory_make("fakesink", "fakesink")
-        self._player.set_property("video-sink", fakesink)
-        
-        # Set up the bus
-        bus = self._player.get_bus()
-        bus.add_signal_watch() # tell the bus that it is being watched
-        bus.connect("message", self._on_message)
+        self._core = cores.GstCore(self)
         
     def _on_play_button_clicked(self, widget, data=None):
         """
         Actions performed when the play button is clicked.
         """
-        self.play()
+        self._core.play()
         
     def _on_stop_button_clicked(self, widget, data=None):
         """
         Actions performed when the stop button is clicked.
         """
-        self.stop()
+        self._core.stop()
         
     def _on_main_window_destroy(self, widget, data=None):
         """
@@ -115,7 +108,7 @@ class MediaPlayer(object):
         """
         Called when file entry sends the activate signal
         """
-        self.play()
+        self._core.play()
             
     def show_message(self, message):
         """
@@ -170,6 +163,6 @@ class MediaPlayer(object):
         Notify the user that the playing of a file was stopped.
         """
         self.show_message("Stopped")
-        
+
 mp = MediaPlayer()
 gtk.main()

@@ -1,0 +1,59 @@
+Vesion 1
+    -play_button functions
+    -statusbar_label displays messages
+    -file name obtained from file_entry
+    
+Version 1.5
+    -changed main_window title to Media Player
+    -added show_message function
+    -added get_filename function
+    -added on_message_{eos, error} functions
+    -added play function
+    -added notify_playing function
+    
+Version 2
+    -main.py
+        -MediaPlayer
+            -added self.current_file
+                -integrated into notify_playing
+            -added on_file_entry_activate function
+                -calls play()
+            -added set_current_filepath
+                -integrated into play
+                -raises InvalidFilepathError
+            -play()
+                -changed message shown when an invalid filepath is entered
+            -changed get_filename to get_filepath
+    -media_player_error.py
+        -created MediaPlayerError
+        -created InvalidFilepathError
+    -main_window.glade
+        -main_window uses audio-x-generic as icon
+        
+Version 3
+    -added leading underscore to all 'private variables'
+    -added stop button
+        -added to main_window.glade
+        -sets player.state to NULL
+        -calls notify_playing
+    -play()
+        -moved self.set_current_file into error block; Exception still raised
+    -created cores.py and interfaces.py
+        -created superclasses for Interface and UI that raise NotImplementedError
+        
+Version 3.5
+    -add comments
+    -created UML diagram
+    -prepended '_' to private methods
+        -propogated to main_window.glade
+    -added _init_{interface, core} methods to MediaPlayer
+        -moved respective code from __init__ to these new methods
+    -moved message for invalid file path from set_current_file to except block in play
+
+Version 4
+    -created GstCore in cores.py
+        -copied code from MediaPlayer._init_core to __init__
+        -moved _current_file
+        -moved play(), stop(), _on_message{,eos,error}, set_current_file()
+    -added NoCurrentFileError to media_player_error.py
+    -MediaPlayerException.__init__ modified to accept *args
