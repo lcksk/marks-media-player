@@ -1,5 +1,5 @@
 # gstcore.py
-# Media Player Version 5.7
+# Media Player Version 6
 
 import os
 

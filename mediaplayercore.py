@@ -1,9 +1,7 @@
 # mediaplayercore.py
-# Media Player Verison 5.7
+# Media Player Verison 6
 #
 # This file contains the abstract class MediaPlayerCore
-
-# Version 5.7
 
 class MediaPlayerCore(object):
     """

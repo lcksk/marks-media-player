@@ -1,5 +1,5 @@
 # gtkinterface.py
-# Media Player Version 5.7
+# Media Player Version 6
 #
 # This file contains a gtk implementation of MediaPlayerInterface
 #
@@ -58,26 +58,35 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         """
         self._statusbar_label.set_text(message)
         
+    def signal_play(self):
+        self._parent.on_play()
+        
+    def signal_stop(self):
+        self._parent.on_stop()
+        
+    def signal_quit(self):
+        self._parent.on_quit()
+    
     def _on_play_button_clicked(self, widget, data=None):
         """
         Actions performed when the play button is clicked.
         """
-        self._parent.play()
+        self.signal_play()
         
     def _on_stop_button_clicked(self, widget, data=None):
         """
         Actions performed when the stop button is clicked.
         """
-        self._parent.stop()
+        self.signal_stop()
         
     def _on_main_window_destroy(self, widget, data=None):
         """
         Actions carried out when the main window is closed.
         """
-        self.end()
-            
+        self.signal_quit()
+        
     def _on_file_entry_activate(self, widget, data=None):
         """
         Called when file entry sends the activate signal
         """
-        self._parent.play()
+        self.signal_play()

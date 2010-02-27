@@ -1,5 +1,5 @@
 # mediaplayerinterface.py
-# Media Player Version 5.7
+# Media Player Version 6
 #
 # This file contains the abstract class MediaPlayerInterface
     
@@ -11,7 +11,7 @@ class MediaPlayerInterface(object):
     def __init__(self, parent):
         self._parent = parent
         
-    def brgin(self):
+    def begin(self):
         """
         Start the interface.
         """
@@ -38,4 +38,13 @@ class MediaPlayerInterface(object):
         """
         Notify the user that the MediaPlayer has stopped playing.
         """
-        raise NotImplemented
+        raise NotImplementedError
+        
+    def signal_play(self):
+        raise NotImplementedError
+        
+    def signal_stop(self):
+        raise NotImplementedError
+
+    def signal_quit(self):
+        raise NotImplementedError

@@ -1,5 +1,5 @@
 # media_player_error.py
-# Media Player Version 5.7
+# Media Player Version 6
 #
 # This file contains all custom exceptions for MediaPlayer
 

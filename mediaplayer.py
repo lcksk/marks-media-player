@@ -1,8 +1,7 @@
 # mediaplayer.py
-# Media Player Version 5.7
+# Media Player Version 6
 #
 # This file contains the MediaPlayer class.
-#
 
 import sys, os
 
@@ -17,6 +16,7 @@ except:
 
 import gstcore
 import gtkinterface
+import clinterface
 from media_player_error import *
     
 class MediaPlayer(object):
@@ -40,7 +40,8 @@ class MediaPlayer(object):
         """
         Initialize the interface of the MediaPlayer.
         """
-        self._interface = gtkinterface.GtkInterface(self)
+        self._interface = clinterface.CLInterface(self)
+        #self._interface = gtkinterface.GtkInterface(self)
         self._interface.begin()
         
     def _init_core(self):
@@ -76,7 +77,19 @@ class MediaPlayer(object):
         """
         if self._core.stop():
             self._interface.notify_stopped()
+            
+    def quit(self):
+        self._interface.end()
+            
+    def on_play(self):
+        self.play()
+    
+    def on_stop(self):
+        self.stop()
         
+    def on_quit(self):
+        self.quit()
+    
     def get_current_file(self):
         """
         Return the current file.

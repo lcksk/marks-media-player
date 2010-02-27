@@ -84,3 +84,13 @@ Version 5.5
 Version 5.7
     -moved implementations of MediaPlayerCore and MediaPlayerInterface into seperate files
         -MediaPlayer currently directly loads gstcore.py and gtkinterface.py
+
+Version 6 - **not fully functional**
+    -observer pattern added into the interface classes and MediaPlayer
+        -quit() method added to 
+        -signal_{play, stop, quit} methods are still hardcoded to self._parent
+    -created CLInterface class
+        -a command line implementation of MediaPlayerInterface
+        -MediaPlayer is still hardcoded to GtkInterface
+            -get_filename()
+            
