@@ -7,7 +7,12 @@ except:
     
 import gst
 
-def MusicPlayerCore(object):
+def MediaPlayerCore(object):
+    """
+    A superclass that all MediaPlayer back ends should inherit from.
+    It defines the standard interface for these classes.
+    """
+    
     def __init__(self):
         pass
         

@@ -6,7 +6,12 @@ except:
     print("pyGTK 2.0 not available")
     sys.exit(1)
 
-def MusicPlayerInterface(object):
+def MediaPlayerInterface(object):
+    """
+    A superclass that all MediaPlayer interfaces should inherit from.
+    It defines the standard interface for these classes.
+    """
+    
     def __init__(self):
         pass
         
