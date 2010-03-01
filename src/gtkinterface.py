@@ -34,11 +34,20 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         self._file_entry = builder.get_object("file_entry")
         self._statusbar_label = builder.get_object("statusbar_label")
         
+        self._command_handlers = []
+        self._close_handlers = []
+        
     def begin(self):
         gtk.main()
         
     def end(self):
         gtk.main_quit()
+        
+    def add_command_handler(self, pl):
+        self._command_handlers.append(pl)
+        
+    def add_close_handler(self, cl):
+        self._close_handlers.append(cl)
         
     def notify_playing(self, name):
         """
@@ -58,11 +67,13 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         """
         self._statusbar_label.set_text(message)
         
-    def signal_play(self):
-        self._parent.on_play()
+    def signal_start_playing(self):
+        for cl in self._command_handlers:
+            cl.on_command_start_playing
         
-    def signal_stop(self):
-        self._parent.on_stop()
+    def signal_stop_playing(self):
+        for cl in self._command_handlers:
+            cl.on_command_stop_playing
         
     def signal_quit(self):
         self._parent.on_quit()
@@ -71,13 +82,13 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         """
         Actions performed when the play button is clicked.
         """
-        self.signal_play()
+        self.signal_start_playing()
         
     def _on_stop_button_clicked(self, widget, data=None):
         """
         Actions performed when the stop button is clicked.
         """
-        self.signal_stop()
+        self.signal_stop_playing()
         
     def _on_main_window_destroy(self, widget, data=None):
         """
@@ -90,4 +101,4 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         Called when file entry sends the activate signal
         """
         self._parent.add_file(self._file_entry.get_text())
-        self._parent.on_play()
+        self.signal_start_playing()
