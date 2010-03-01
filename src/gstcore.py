@@ -44,8 +44,12 @@ class GstCore(mediaplayercore.MediaPlayerCore):
         self._player.set_property("uri", "file://" + 
                 self._parent.get_current_file())
         
-        if (self._player.set_state(gst.STATE_PLAYING) == 
-                gst.STATE_CHANGE_ASYNC):
+        try:
+            new_state = self._player.set_state(gst.STATE_PLAYING)
+        except Error:
+            return False
+            
+        if (new_state == gst.STATE_CHANGE_ASYNC):
             return True
         else:
             return False

@@ -33,6 +33,9 @@ class MediaFileManager(object):
         Add a file to the playlist.
         """
         raise NotImplementedError
+        
+    def has_current_file(self):
+        raise NotImplementedError
 
 class QueuedFileManager(MediaFileManager):
     """
@@ -49,7 +52,7 @@ class QueuedFileManager(MediaFileManager):
         else:
             raise InvalidFilepathError
         
-    def get_next_file(self):
+    def next(self):
         try:
             self._current_file = self._queue.dequeue().data
         except AttributeError: # if the queue is empty
@@ -60,11 +63,7 @@ class QueuedFileManager(MediaFileManager):
         
     def get_current_file(self):
         if self._current_file is None:
-            try:
-                self.get_next_file()
-            # if there was no next file, this avoids an infinite loop
-            except AttributeError:
-                raise NoCurrentFileError
+            raise NoCurrentFileError
         else:
             return self._current_file
 
@@ -96,4 +95,7 @@ class SingleFileManager(MediaFileManager):
             return self._file
         
     def next(self):
-        return self.get_current_file()
+        pass
+        
+    def has_current_file(self):
+        return self._file is not None

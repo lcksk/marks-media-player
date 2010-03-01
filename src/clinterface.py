@@ -8,7 +8,7 @@ import mediaplayerinterface
 class CLInterface(mediaplayerinterface.MediaPlayerInterface):
     def __init__(self, parent):
         super(CLInterface, self).__init__(parent)
-        self._commands = {"play" : ["play"], "quit" : ["quit", "end", "exit"], "stop" : ["stop"]}
+        self._commands = {"play" : ["play"], "quit" : ["quit", "end", "exit", "q"], "stop" : ["stop"]}
         self._prompt = ":-P" + " "
 
     def begin(self):

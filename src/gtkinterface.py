@@ -40,11 +40,11 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
     def end(self):
         gtk.main_quit()
         
-    def notify_playing(self):
+    def notify_playing(self, name):
         """
         Notify the user that a file is playing.
         """
-        self.show_message("Playing " + self._parent.get_current_file())
+        self.show_message("Playing " + name)
         
     def notify_stopped(self):
         """
@@ -89,4 +89,5 @@ class GtkInterface(mediaplayerinterface.MediaPlayerInterface):
         """
         Called when file entry sends the activate signal
         """
-        self.signal_play()
+        self._parent.add_file(self._file_entry.get_text())
+        self._parent.on_play()

@@ -59,12 +59,15 @@ class MediaPlayer(object):
         Initialize the file manager.
         """
         self._manager = mediafilemanager.SingleFileManager(self)
-        self.add_file("/home/mark/Music/Major_Tom.mp3")#########################################
+        #self.add_file("/home/mark/Music/Major_Tom.mp3")#########################################
         
     def play(self):
         """
         Tell the player to play the current file.
         """
+        if not self._manager.has_current_file():
+            self._manager.next()
+            
         if self._core.play():
             self._interface.notify_playing(self._manager.get_current_file())
         
